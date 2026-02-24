@@ -8,6 +8,7 @@ import { format, subDays, isAfter, parseISO } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
+  const { userName } = useAuth();
   const journals = getJournals();
   const fitness = getFitnessLogs();
   const meds = getMedications();
