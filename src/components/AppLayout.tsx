@@ -44,6 +44,9 @@ export default function AppLayout() {
                 {item.label}
               </NavLink>
             ))}
+            <Button variant="ghost" size="sm" onClick={logout} className="ml-2 text-muted-foreground hover:text-foreground">
+              <LogOut className="w-4 h-4" />
+            </Button>
           </nav>
         </div>
       </header>
