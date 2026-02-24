@@ -1,5 +1,6 @@
 import { BookHeart, Pill, Activity, TrendingUp, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/contexts/AuthContext';
 import StatCard from '@/components/StatCard';
 import { getJournals, getFitnessLogs, getMedications, getMedLogs } from '@/lib/storage';
 import { getWeeklyInsights } from '@/lib/insights';
