@@ -1,4 +1,6 @@
-// localStorage wrapper for MindMesh data
+// localStorage wrapper for MindMesh data — scoped per user
+
+import { getCurrentUserId } from './auth';
 
 export interface UserProfile {
   name: string;
@@ -39,13 +41,10 @@ export interface FitnessLog {
   intensity: 'LOW' | 'MEDIUM' | 'HIGH';
 }
 
-const KEYS = {
-  PROFILE: 'mindmesh_profile',
-  JOURNALS: 'mindmesh_journals',
-  MEDICATIONS: 'mindmesh_medications',
-  MED_LOGS: 'mindmesh_med_logs',
-  FITNESS: 'mindmesh_fitness',
-};
+function userKey(base: string): string {
+  const uid = getCurrentUserId();
+  return uid ? `mindmesh_${uid}_${base}` : `mindmesh_${base}`;
+}
 
 function get<T>(key: string, fallback: T): T {
   try {
@@ -61,43 +60,43 @@ function set(key: string, value: unknown) {
 }
 
 // Profile
-export const getProfile = (): UserProfile | null => get(KEYS.PROFILE, null);
-export const setProfile = (p: UserProfile) => set(KEYS.PROFILE, p);
+export const getProfile = (): UserProfile | null => get(userKey('profile'), null);
+export const setProfile = (p: UserProfile) => set(userKey('profile'), p);
 
 // Journal
-export const getJournals = (): JournalEntry[] => get(KEYS.JOURNALS, []);
+export const getJournals = (): JournalEntry[] => get(userKey('journals'), []);
 export const addJournal = (entry: JournalEntry) => {
   const entries = getJournals();
   entries.unshift(entry);
-  set(KEYS.JOURNALS, entries);
+  set(userKey('journals'), entries);
 };
 
 // Medications
-export const getMedications = (): Medication[] => get(KEYS.MEDICATIONS, []);
+export const getMedications = (): Medication[] => get(userKey('medications'), []);
 export const addMedication = (med: Medication) => {
   const meds = getMedications();
   meds.push(med);
-  set(KEYS.MEDICATIONS, meds);
+  set(userKey('medications'), meds);
 };
 export const removeMedication = (id: string) => {
-  set(KEYS.MEDICATIONS, getMedications().filter(m => m.id !== id));
-  set(KEYS.MED_LOGS, getMedLogs().filter(l => l.medicationId !== id));
+  set(userKey('medications'), getMedications().filter(m => m.id !== id));
+  set(userKey('med_logs'), getMedLogs().filter(l => l.medicationId !== id));
 };
 
 // Medication Logs
-export const getMedLogs = (): MedicationLog[] => get(KEYS.MED_LOGS, []);
+export const getMedLogs = (): MedicationLog[] => get(userKey('med_logs'), []);
 export const addMedLog = (log: MedicationLog) => {
   const logs = getMedLogs();
   logs.push(log);
-  set(KEYS.MED_LOGS, logs);
+  set(userKey('med_logs'), logs);
 };
 
 // Fitness
-export const getFitnessLogs = (): FitnessLog[] => get(KEYS.FITNESS, []);
+export const getFitnessLogs = (): FitnessLog[] => get(userKey('fitness'), []);
 export const addFitnessLog = (log: FitnessLog) => {
   const logs = getFitnessLogs();
   logs.push(log);
-  set(KEYS.FITNESS, logs);
+  set(userKey('fitness'), logs);
 };
 
 export const generateId = () => Math.random().toString(36).substring(2, 10);

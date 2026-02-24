@@ -1,5 +1,6 @@
 import { BookHeart, Pill, Activity, TrendingUp, Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/contexts/AuthContext';
 import StatCard from '@/components/StatCard';
 import { getJournals, getFitnessLogs, getMedications, getMedLogs } from '@/lib/storage';
 import { getWeeklyInsights } from '@/lib/insights';
@@ -7,6 +8,7 @@ import { format, subDays, isAfter, parseISO } from 'date-fns';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function Dashboard() {
+  const { userName } = useAuth();
   const journals = getJournals();
   const fitness = getFitnessLogs();
   const meds = getMedications();
@@ -53,7 +55,7 @@ export default function Dashboard() {
         <div className="flex items-center gap-3 mb-2">
           <Sparkles className="w-6 h-6 text-primary" />
           <h1 className="text-2xl md:text-3xl font-display font-bold text-foreground">
-            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}
+            Good {new Date().getHours() < 12 ? 'morning' : new Date().getHours() < 17 ? 'afternoon' : 'evening'}{userName ? `, ${userName}` : ''}
           </h1>
         </div>
         <p className="text-muted-foreground max-w-lg">
