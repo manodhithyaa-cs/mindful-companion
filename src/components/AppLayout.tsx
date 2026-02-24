@@ -1,6 +1,8 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { Brain, BookHeart, Pill, Activity, BarChart3 } from 'lucide-react';
+import { Brain, BookHeart, Pill, Activity, BarChart3, LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
 
 const NAV_ITEMS = [
   { to: '/', icon: Brain, label: 'Dashboard' },
@@ -11,6 +13,7 @@ const NAV_ITEMS = [
 ];
 
 export default function AppLayout() {
+  const { userName, logout } = useAuth();
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
